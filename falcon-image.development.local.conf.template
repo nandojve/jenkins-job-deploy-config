@@ -1,0 +1,51 @@
+EXTRA_IMAGE_FEATURES ?= 'debug-tweaks tools-debug'
+USER_CLASSES ?= 'buildstats image-mklibs image-prelink'
+PATCHRESOLVE = 'noop'
+BB_DISKMON_DIRS = '\
+     \
+    STOPTASKS,${TMPDIR},1G,100K \
+    STOPTASKS,${DL_DIR},1G,100K \
+    STOPTASKS,${SSTATE_DIR},1G,100K \
+    STOPTASKS,/tmp,100M,100K \
+    ABORT,${TMPDIR},100M,1K \
+    ABORT,${DL_DIR},100M,1K \
+    ABORT,${SSTATE_DIR},100M,1K \
+    ABORT,/tmp,10M,1K \
+'
+PACKAGECONFIG_append_pn-qemu-native = ' sdl'
+PACKAGECONFIG_append_pn-nativesdk-qemu = ' sdl'
+CONF_VERSION = '1'
+YOCTO_DIR ?= "falcon"
+PLATFORM_ROOT_DIR = '${HOME}/peregrine/${YOCTO_DIR}'
+PLATFORM_DL_DIR = '${HOME}/peregrine/dl_area/'
+DL_DIR = '${PLATFORM_DL_DIR}'
+DEPLOY_DIR = '@DEPLOY@'
+MACHINE ?= '@MACHINE@'
+SDKMACHINE ?= 'x86_64'
+DISTRO ?= '@DISTRO@'
+PACKAGE_CLASSES ?= 'package_ipk'
+BUILDHISTORY_COMMIT = '0'
+DEBUG_BUILD = '1'
+
+PREFERRED_VERSION_nginx_forcevariable = '1.9.14'
+LICENSE_FLAGS_WHITELIST = "commercial_ffmpeg commercial_x264"
+
+PREMIRRORS_append = "\
+      git://.*/.* file://${PLATFORM_DL_DIR} \n \
+      svn://.*/.* file://${PLATFORM_DL_DIR} \n \
+      ftp://.*/.* file://${PLATFORM_DL_DIR} \n \
+      http://.*/.* file://${PLATFORM_DL_DIR} \n \
+      https://.*/.* file://${PLATFORM_DL_DIR} \n \
+"
+
+BUILD_NUMBER = "@BUILD_NUMBER@"
+
+GERRIT_STRATEGY = "@GERRIT_STRATEGY@"
+GERRIT_CONFDIR = "@GERRIT_CONFDIR@"
+GERRIT_MODE = "@GERRIT_MODE@"
+
+INHERIT += "gerrit-srcrev-handler"
+
+ERROR_QA_remove = " version-going-backwards"
+#WARN_QA_append = " version-going-backwards"
+
